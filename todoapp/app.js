@@ -7,6 +7,10 @@ const addTarea = () =>{
     divTareas.appendChild(createTarea(tarea));
     inputTarea.value = '';
 }
+const deleteItem = (e) => {
+    const pa = e.target.parentElement;
+    pa.remove();
+}
 
 const createTarea = (tarea) => {
     const div = document.createElement('div');
@@ -14,6 +18,7 @@ const createTarea = (tarea) => {
     const button = document.createElement('button');
     p.innerText = tarea;
     button.innerText = 'Eliminar';
+    button.addEventListener('click', deleteItem)
     div.appendChild(p);
     div.appendChild(button);
     return div;
