@@ -3,7 +3,7 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: burlywood;
+    background-color: blue;
 }
 .images,  .choices, .result{
     width: 100%;
