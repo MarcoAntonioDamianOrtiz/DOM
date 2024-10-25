@@ -17,22 +17,24 @@ const addTarea = () => {
         }
     );
     construyeDivs();
-    localStorage.setItem('tareas', JSON.stringify(arrayTareas))
+    localStorage.setItem('tareas', JSON.stringify(arrayTareas));
 }
 
 const construyeDivs = () => {
-    divTareas.innerHTML = ''
+    divTareas.innerHTML = '';
     arrayTareas.forEach(tarea => {
         divTareas.appendChild(createTarea(tarea));
-    })
+    });
 }
 
 const deleteItem = (e) => {
-    const cDiv = e.target;
+    const cDiv = e.target.parentElement;
     const id = cDiv.getAttribute('data-id');
-    const encontrado = arrayTareas.findIndex(tarea => tarea.id !== Number(id));
-    const pa = e.target.parentElement;
-    pa.remove();
+    const index = arrayTareas.findIndex(tarea => tarea.id === Number(id));
+    if (index !== -1) {
+        arrayTareas.splice(index, 1);
+    }
+    construyeDivs();
     localStorage.setItem('tareas', JSON.stringify(arrayTareas));
 }
 
@@ -42,7 +44,7 @@ const createTarea = (tarea) => {
     const button = document.createElement('button');
     p.innerText = tarea.tarea;
     button.innerText = 'Eliminar';
-    button.addEventListener('click', deleteItem)
+    button.addEventListener('click', deleteItem);
     div.appendChild(p);
     div.appendChild(button);
     div.classList.add('alert');
@@ -51,21 +53,27 @@ const createTarea = (tarea) => {
     div.addEventListener('click', changeColor);
     return div;
 };
+
 const changeColor = (e) => {
-    if (cDiv.classList.contains('danger')) {
-        cDiv.classList.remove('danger');
-        cDiv.classList.add('warning');
-        arrayTareas(encontrado).estado = "warning"
-    } else if (cDiv.classList.contains('warning')) {
-        cDiv.classList.remove('warning');
-        cDiv.classList.add('success');
-        arrayTareas(encontrado).estado = "success"
+    const cDiv = e.currentTarget;
+    const id = Number(cDiv.getAttribute('data-id')); 
+    const index = arrayTareas.findIndex(tarea => tarea.id === id); 
+
+    if (index !== -1) {
+        if (cDiv.classList.contains('danger')) {
+            cDiv.classList.remove('danger');
+            cDiv.classList.add('warning');
+            arrayTareas[index].estado = "warning"; 
+        } else if (cDiv.classList.contains('warning')) {
+            cDiv.classList.remove('warning');
+            cDiv.classList.add('success');
+            arrayTareas[index].estado = "success"; 
+        }
+        localStorage.setItem('tareas', JSON.stringify(arrayTareas)); 
     }
-    localStorage.setItem('tareas', JSON.stringify(arrayTareas));
 }
 construyeDivs();
-
 myform.addEventListener('submit', (e) => {
     e.preventDefault();
     addTarea();
-})
+});
